@@ -1,4 +1,5 @@
 from multiprocessing import Process, Queue
+from main_telem import telem_tools
 import time
 import numpy as np
 
@@ -27,29 +28,6 @@ def process_window_data(data, data_count):
     print("large data read, saving...", data_count)
 
 
-class RingBuffer():
-    """
-    https://scimusing.wordpress.com/2013/10/25/ring-buffers-in-pythonnumpy/
-    TODO: migrate to the RingBuffer package at:
-    https://github.com/eric-wieser/numpy_ringbuffer
-    """
-    "A 1D ring buffer using numpy arrays"
-    def __init__(self, length):
-        self.data = np.zeros(length, dtype='f')
-        self.index = 0
-
-    def extend(self, x):
-        "adds array x to ring buffer"
-        x_index = (self.index + np.arange(x.size)) % self.data.size
-        self.data[x_index] = x
-        self.index = x_index[-1] + 1
-
-    def get(self):
-        "Returns the first-in-first-out data in the ring buffer"
-        idx = (self.index + np.arange(self.data.size)) %self.data.size
-        return self.data[idx]
-
-
 if __name__ == '__main__':
     """
     Main Loop of the telemetry system
@@ -60,7 +38,7 @@ if __name__ == '__main__':
     machine learning algorithms.
     """
     q = Queue()
-    ringbuf = RingBuffer(GLOBAL_WINDOW_SIZE)
+    ringbuf = telem_tools.RingBuffer(GLOBAL_WINDOW_SIZE)
     window_counter = GLOBAL_WINDOW_SIZE
     data_counter = 0
 
