@@ -12,7 +12,14 @@ This demo simulates a remote telemetry device located on a race car, providing d
 
 **Implementation**:
 
-In order to take full advantage of the Intel® Joule hardware, _multiprocessing_ is used to access all 4 cores of the CPU.  The data collection and storage utilizes a queue, and the machine learning tasks are done with asynchronous processes.  The collection and storage queue utilizes _hdf5_ via _pytables_, and has a windowed sensor data of a few seconds implemented with a ring buffer.  Sensor reads are done with Intel's MRAA library for IoT devices, and the code is prioritized to not drop data when possible.  
+In order to take full advantage of the Intel® Joule hardware, _multiprocessing_ is used to access all 4 cores of the CPU on the Joule.  The data collection and storage utilizes a queue, and the machine learning tasks are done with asynchronous processes.  The collection and storage process utilizes the multiprocessing queue to maintain light ordering (but not strict), and has a windowed sensor data of a few seconds implemented with a ring buffer.  Sensor reads are done with Intel's MRAA library for IoT devices, and the code is prioritized to not drop data when possible.  
+
+**Hardware and OS**
+
+The code is designed to run on Ubuntu Desktop 16.04 LTS, with the Intel® Distribution for Python\* as the Python environment.  Use of the scaffold code subs out the sensor reads with mocked data such that one may develop the code on other forms of OS (such as MacOS or Windows).  
+
+The hardware used is the Intel® Joule 570x developer kit, used with the AC adapter and the heatsink installed.  In its current form, a display, mouse, and keyboard will be needed to use or demo the project.
 
 **License**
+
 MIT
